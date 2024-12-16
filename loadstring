@@ -1,0 +1,19 @@
+local function loadScriptFromURL(url)
+    local success, scriptContent = pcall(game.HttpGet, game, url)
+    if not success then
+        warn("Failed to fetch script: " .. tostring(scriptContent))
+        return
+    end
+
+    success, result = pcall(loadstring(scriptContent))
+    if success then 
+        warn("Script loaded successfully.") 
+    else
+        warn("Failed to load script: " .. tostring(result))
+    end
+end
+
+if not _G.FB35D then
+    _G.FB35D = true
+    loadScriptFromURL("https://raw.githubusercontent.com/vertex-peak/vertex/main/modules/" .. game.PlaceId .. ".lua")
+end
