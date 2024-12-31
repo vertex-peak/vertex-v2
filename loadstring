@@ -5,15 +5,16 @@ local function loadScriptFromURL(url)
         return
     end
 
-    success, result = pcall(loadstring(scriptContent))
-    if success then 
-        warn("Script loaded successfully.") 
-    else
-        warn("Failed to load script: " .. tostring(result))
+    local func, err = loadstring(scriptContent)
+    if not func then
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/vertex-peak/vertex/refs/heads/main/universal"))()
+        return
     end
+
+    success, result = pcall(func)
 end
 
-if not _G.FB35D then
-    _G.FB35D = true
+if not shared.VertexExecuted then
+    shared.VertexExecuted = true
     loadScriptFromURL("https://raw.githubusercontent.com/vertex-peak/vertex/main/modules/" .. game.PlaceId .. ".lua")
 end
