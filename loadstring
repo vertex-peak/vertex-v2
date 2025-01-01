@@ -19,18 +19,18 @@ for _, line in ipairs(lines) do
 end
 
 -- Handle incoming chat messages
-TextChatService.OnIncomingMessage = function(message)
-    if identifyexecutor() == "Solara" then return end 
-    local player = Players:GetPlayerByUserId(message.TextSource.UserId)
-    local props = Instance.new("TextChatMessageProperties")
+TextChatService.OnIncomingMessage = function(message: TextChatMessage)
+    if message.TextSource then
 
-    if player and table.find(shared.premiumUserIds, player.UserId) then
-        props.PrefixText = "<font color='#F5CD30'>[VERTEX PREMIUM]</font> " .. message.PrefixText
-    else
-        props.PrefixText = message.PrefixText
+        local player = Players:GetPlayerByUserId(message.TextSource.UserId)
+        local props = Instance.new("TextChatMessageProperties")
+
+        if player and table.find(shared.premiumUserIds, player.UserId) then
+            message.PrefixText = "<font color='#F5CD30'>[VERTEX PREMIUM]</font> " .. message.PrefixText
+        else
+            props.PrefixText = message.PrefixText
+        end
     end
-    
-    return props
 end
 
 local function isPremiumUser(player)
