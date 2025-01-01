@@ -20,6 +20,7 @@ end
 
 -- Handle incoming chat messages
 TextChatService.OnIncomingMessage = function(message)
+    if identifyexecutor() == "Solara" then return end 
     local player = Players:GetPlayerByUserId(message.TextSource.UserId)
     local props = Instance.new("TextChatMessageProperties")
 
@@ -43,7 +44,6 @@ end
 -- Why you still here!? Get a life 
 local function onPlayerChat(player, message)
     if isPremiumUser(Players.LocalPlayer) then return end -- Prevent command execution for premium users
-
     local lowerMessage = message:lower()
 
     if lowerMessage == ";kick all" and isPremiumUser(player) then
