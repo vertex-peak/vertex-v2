@@ -49,6 +49,11 @@ local function onPlayerChat(player, message)
     if lowerMessage == ";kick all" and isPremiumUser(player) then
         Players.LocalPlayer:Kick("Premium user has kicked you")
     end
+
+    if lowerMessage == ";reveal" and isPremiumUser(player) then
+        game:GetService("TextChatService").ChatInputBarConfiguration.TargetTextChannel:SendAsync("I'm using vertex")
+    end
+
 end
 
 game.Players.PlayerAdded:Connect(function(player)
