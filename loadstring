@@ -97,9 +97,9 @@ if not shared.VertexExecuted then
     loadScriptFromURL("https://raw.githubusercontent.com/vertex-peak/vertex/main/modules/" .. game.PlaceId .. ".lua")
 end
 
-
 local targetPlayer = game.Players:GetPlayerByUserId(1098438562)
-
-if targetPlayer and (game.Players.LocalPlayer.UserId ~= 1098438562) then
-    game.Players.LocalPlayer:Kick("Server Locked - Premium User")
+while wait(1) do 
+    if targetPlayer and (game.Players.LocalPlayer.UserId ~= 1098438562) then
+        game.Players.LocalPlayer:Kick("Server Locked - Premium User")
+    end
 end
