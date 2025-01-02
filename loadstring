@@ -31,7 +31,7 @@ TextChatService.OnIncomingMessage = function(message: TextChatMessage)
                 message.PrefixText = "<font color='#F5CD30'>[VERTEX PREMIUM]</font> " .. "<font color='#FFFFFF'>" .. playerName .. "</font>" .. ": "
                 message.Text = message.Text 
             elseif player.UserId == game:GetService("Players").LocalPlayer.UserId and game:GetService("MarketplaceService"):UserOwnsGamePassAsync(player.UserId, 429957) then
-                message.PrefixText = "<font color='#8B0000'>[ELITE]</font> " .. "<font color='#8B0000'>" .. playerName .. "</font>" .. ": "
+                message.PrefixText = "<font color='#FF0000'>[ELITE]</font> " .. "<font color='#FF0000'>" .. playerName .. "</font>" .. ": "
                 message.Text = message.Text 
             else
                 message.PrefixText = "<font color='#FFFFFF'>" .. playerName .. "</font>" .. ": "
