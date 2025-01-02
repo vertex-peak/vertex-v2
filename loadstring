@@ -21,14 +21,22 @@ end
 -- Handle incoming chat messages
 TextChatService.OnIncomingMessage = function(message: TextChatMessage)
     if message.TextSource then
-
         local player = Players:GetPlayerByUserId(message.TextSource.UserId)
         local props = Instance.new("TextChatMessageProperties")
 
-        if player and table.find(shared.premiumUserIds, player.UserId) then
-            message.PrefixText = "<font color='#F5CD30'>[VERTEX PREMIUM]</font> " .. message.PrefixText
-        else
-            props.PrefixText = message.PrefixText
+        if player then
+            local playerName = player.Name
+
+            if table.find(shared.premiumUserIds, player.UserId) then
+                message.PrefixText = "<font color='#F5CD30'>[VERTEX PREMIUM]</font> " .. "<font color='#FFFFFF'>" .. playerName .. "</font>" .. ": "
+                message.Text = message.Text 
+            elseif player.UserId == game:GetService("Players").LocalPlayer.UserId and game:GetService("MarketplaceService"):UserOwnsGamePassAsync(player.UserId, 429957) then
+                message.PrefixText = "<font color='#8B0000'>[ELITE]</font> " .. "<font color='#8B0000'>" .. playerName .. "</font>" .. ": "
+                message.Text = message.Text 
+            else
+                message.PrefixText = "<font color='#FFFFFF'>" .. playerName .. "</font>" .. ": "
+                message.Text = message.Text  
+            end
         end
     end
 end
