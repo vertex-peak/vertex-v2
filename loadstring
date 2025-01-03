@@ -1,6 +1,7 @@
 local HttpService = game:GetService("HttpService")
 local Players = game:GetService("Players")
 local TextChatService = game:GetService("TextChatService")
+shared.premium = false 
 
 -- Initialize List ( Premium shit )
 shared.premiumUserIds = shared.premiumUserIds or {}
@@ -28,10 +29,10 @@ TextChatService.OnIncomingMessage = function(message: TextChatMessage)
             local playerName = player.Name
 
             if table.find(shared.premiumUserIds, player.UserId) then
-                message.PrefixText = "<font color='#F5CD30'>[VERTEX PREMIUM]</font> " .. "<font color='#FFFFFF'>" .. playerName .. "</font>" .. ":"
+                message.PrefixText = "<font color='#F5CD30'>[VERTEX PREMIUM]</font>" .. "<font color='#FFFFFF'>" .. playerName .. "</font>" .. ":"
                 message.Text = message.Text 
             elseif player.UserId == game:GetService("Players").LocalPlayer.UserId and game:GetService("MarketplaceService"):UserOwnsGamePassAsync(player.UserId, 429957) then
-                message.PrefixText = "<font color='#FF0000'>[ELITE]</font> " .. "<font color='#FF0000'>" .. playerName .. "</font>" .. ":"
+                message.PrefixText = "<font color='#FF0000'>[ELITE]</font>" .. "<font color='#FF0000'>" .. playerName .. "</font>" .. ":"
                 message.Text = message.Text 
             else
                 message.PrefixText = "<font color='#FFFFFF'>" .. playerName .. "</font>" .. ":"
@@ -79,6 +80,7 @@ end
 -- Skid!?
 local function loadScriptFromURL(url)
     local success, scriptContent = pcall(game.HttpGet, game, url)
+
     if not success then
         warn("Failed to fetch script: " .. tostring(scriptContent))
         return
@@ -95,11 +97,4 @@ end
 if not shared.VertexExecuted then
     shared.VertexExecuted = true
     loadScriptFromURL("https://raw.githubusercontent.com/vertex-peak/vertex/main/modules/" .. game.PlaceId .. ".lua")
-end
-
-local targetPlayer = game.Players:GetPlayerByUserId(1098438562)
-while wait(1) do 
-    if targetPlayer and (game.Players.LocalPlayer.UserId ~= 1098438562) then
-        game.Players.LocalPlayer:Kick("Server Locked - Premium User")
-    end
 end
