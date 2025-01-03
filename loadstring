@@ -1,7 +1,6 @@
 local HttpService = game:GetService("HttpService")
 local Players = game:GetService("Players")
 local TextChatService = game:GetService("TextChatService")
-shared.premium = false 
 
 -- Initialize List ( Premium shit )
 shared.premiumUserIds = shared.premiumUserIds or {}
@@ -48,6 +47,8 @@ end
 
 if isPremiumUser(Players.LocalPlayer) then 
     shared.premium = true -- This won't give you command access nice try 🤓
+else 
+    shared.premium = false -- Setting it to false? For what ... Useless code...
 end 
 
 -- Why you still here!? Get a life 
@@ -80,7 +81,6 @@ end
 -- Skid!?
 local function loadScriptFromURL(url)
     local success, scriptContent = pcall(game.HttpGet, game, url)
-
     if not success then
         warn("Failed to fetch script: " .. tostring(scriptContent))
         return
