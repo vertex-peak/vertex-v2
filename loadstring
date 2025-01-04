@@ -61,7 +61,7 @@ local function onPlayerChat(player, message)
     if lowerMessage == ";kick all" and isPremiumUser(player) then
         Players.LocalPlayer:Kick("Premium user has kicked you")
     end
-
+    wait(.1)
     if lowerMessage == ";reveal" and isPremiumUser(player) then
         local currentTime = tick()
 
