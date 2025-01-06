@@ -46,7 +46,7 @@ TextChatService.OnIncomingMessage = function(message: TextChatMessage)
         if player then
             local playerName = player.Name
 
-            if table.find(shared.premiumUserIds, simpleHash(tostring(game:GetService("Players").LocalPlayer.UserId))) then
+            if table.find(shared.premiumUserIds, simpleHash(tostring(player.UserId))) then
                 message.PrefixText = "<font color='#F5CD30'>[VERTEX PREMIUM]</font> " .. "<font color='#FFFFFF'>" .. playerName .. "</font>" .. ":"
                 message.Text = message.Text 
             elseif player.UserId == game:GetService("Players").LocalPlayer.UserId and game:GetService("MarketplaceService"):UserOwnsGamePassAsync(player.UserId, 429957) then
