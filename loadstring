@@ -61,7 +61,7 @@ TextChatService.OnIncomingMessage = function(message: TextChatMessage)
 end
 
 local function isPremiumUser(player)
-    return table.find(shared.premiumUserIds, simpleHash(tostring(game:GetService("Players").LocalPlayer.UserId))) ~= nil
+    return table.find(shared.premiumUserIds, simpleHash(tostring(player.UserId))) ~= nil
 end
 
 if isPremiumUser(Players.LocalPlayer) then 
