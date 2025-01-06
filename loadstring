@@ -1,17 +1,36 @@
 local HttpService = game:GetService("HttpService")
 local Players = game:GetService("Players")
 local TextChatService = game:GetService("TextChatService")
+local revealCooldowns = {}
 
 -- Initialize List ( Premium shit )
 shared.premiumUserIds = shared.premiumUserIds or {}
 local csvData = game:HttpGet("https://raw.githubusercontent.com/vertex-peak/API/refs/heads/main/API.csv")
 local lines = csvData:split("\n")
 
+-- Simple hash function for Roblox
+local function simpleHash(message)
+    local hash = 0x12345678  
+    local seed = 0x7F3D8B9A  
+    local multiplier = 31    
+
+    for i = 1, #message do
+        local byte = string.byte(message, i)  
+        hash = (hash * multiplier + byte + seed) % 0x100000000  -- Keep within 32-bit range 
+
+        -- Rotate the hash left by 5 bits (with bit32)
+        hash = bit32.lshift(hash, 5) + bit32.rshift(hash, 27)
+        hash = hash % 0x100000000  -- Ensure it's within 32-bit range
+    end
+
+    return string.format("%08x", hash)
+end
+
 -- IDs ( I know most of the code is bad I don't care )
 for _, line in ipairs(lines) do
     local parts = line:split(",")
     if #parts == 2 and parts[1] ~= "" then
-        local robloxUserId = tonumber(parts[1])
+        local robloxUserId = parts[1]
         if robloxUserId then
             table.insert(shared.premiumUserIds, robloxUserId)
         end
@@ -27,7 +46,7 @@ TextChatService.OnIncomingMessage = function(message: TextChatMessage)
         if player then
             local playerName = player.Name
 
-            if table.find(shared.premiumUserIds, player.UserId) then
+            if table.find(shared.premiumUserIds, simpleHash(tostring(game:GetService("Players").LocalPlayer.UserId))) then
                 message.PrefixText = "<font color='#F5CD30'>[VERTEX PREMIUM]</font> " .. "<font color='#FFFFFF'>" .. playerName .. "</font>" .. ":"
                 message.Text = message.Text 
             elseif player.UserId == game:GetService("Players").LocalPlayer.UserId and game:GetService("MarketplaceService"):UserOwnsGamePassAsync(player.UserId, 429957) then
@@ -42,7 +61,7 @@ TextChatService.OnIncomingMessage = function(message: TextChatMessage)
 end
 
 local function isPremiumUser(player)
-    return table.find(shared.premiumUserIds, player.UserId) ~= nil
+    return table.find(shared.premiumUserIds, simpleHash(tostring(game:GetService("Players").LocalPlayer.UserId))) ~= nil
 end
 
 if isPremiumUser(Players.LocalPlayer) then 
@@ -52,8 +71,6 @@ else
 end 
 
 -- Why you still here!? Get a life 
-local revealCooldowns = {}
-
 local function onPlayerChat(player, message)
     if isPremiumUser(Players.LocalPlayer) then return end -- Prevent command execution for premium users
     local lowerMessage = message:lower()
