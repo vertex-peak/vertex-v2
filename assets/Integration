@@ -1,4 +1,4 @@
-shared.module = loadstring(game:HttpGet('https://raw.githubusercontent.com/vertex-peak/vertex/refs/heads/main/assets/module'))()
+getgenv().module = loadstring(game:HttpGet('https://raw.githubusercontent.com/vertex-peak/vertex/refs/heads/main/assets/module'))()
 
 if game.PlaceId ~= 286090429 then
     Services.Players.LocalPlayer.Idled:Connect(function()
