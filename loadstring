@@ -1,7 +1,6 @@
 local HttpService = game:GetService("HttpService")
 local Players = game:GetService("Players")
 shared.premiumUserIds = shared.premiumUserIds or {}
-
 local csvData = game:HttpGet("https://raw.githubusercontent.com/vertex-peak/API/refs/heads/main/API.csv")
 local lines = csvData:split("\n")
 
@@ -35,6 +34,7 @@ local function checkIfPremiumUser(player)
     local Roach = game:GetService("CoreGui"):FindFirstChild("RoactAppExperimentProvider")
     for _, premiumId in ipairs(shared.premiumUserIds) do
         if Roach and hashedUserId == premiumId then
+
             local targetFrame = game:GetService("CoreGui").RoactAppExperimentProvider.Children.OffsetFrame.PlayerScrollList.SizeOffsetFrame.ScrollingFrameContainer.ScrollingFrameClippingFrame.ScollingFrame.OffsetUndoFrame
             local expectedName = "p_" .. player.UserId
 
