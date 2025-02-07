@@ -1,8 +1,9 @@
 local HttpService = game:GetService("HttpService")
 local Players = game:GetService("Players")
+shared.premiumUserIds = shared.premiumUserIds or {}
+
 local csvData = game:HttpGet("https://raw.githubusercontent.com/vertex-peak/API/refs/heads/main/API.csv")
 local lines = csvData:split("\n")
-shared.premiumUserIds = shared.premiumUserIds or {}
 
 local function simpleHash(message)
     local hash = 0x12345678  
@@ -47,11 +48,6 @@ local function checkIfPremiumUser(player)
             end
         end
         if hashedUserId == premiumId then
-            if player == Players.LocalPlayer then
-                shared.premium = true -- This won't give you command access nice try 🤓
-            elseif player == Players.LocalPlayer then 
-                shared.premium = false 
-            end
             return true
         end
     end
@@ -95,12 +91,19 @@ local function changeColorForTextLabels(player)
     end)
 end
 
-for _, player in ipairs(Players:GetPlayers()) do
-    spawn(function()
-        if player.Character then
-            if player.Character:FindFirstChild("Humanoid") and player.Character:FindFirstChild("Head") then
-                if checkIfPremiumUser(player) then
-                    changeColorForTextLabels(player)
+if not shared.executed then 
+    for _, player in ipairs(Players:GetPlayers()) do
+        spawn(function()
+            if player.Character then
+                if player.Character:FindFirstChild("Humanoid") and player.Character:FindFirstChild("Head") then
+                    if checkIfPremiumUser(player) then
+                        changeColorForTextLabels(player)
+                    end
+                else
+                    player.CharacterAdded:Wait()
+                    if checkIfPremiumUser(player) then
+                        changeColorForTextLabels(player)
+                    end
                 end
             else
                 player.CharacterAdded:Wait()
@@ -108,21 +111,28 @@ for _, player in ipairs(Players:GetPlayers()) do
                     changeColorForTextLabels(player)
                 end
             end
-        else
-            player.CharacterAdded:Wait()
-            if checkIfPremiumUser(player) then
-                changeColorForTextLabels(player)
-            end
+        end)
+    end
+    
+    Players.PlayerAdded:Connect(function(player)
+        player.CharacterAdded:Wait()
+        if checkIfPremiumUser(player) then
+            changeColorForTextLabels(player)
         end
     end)
+end 
+
+shared.executed = true 
+
+local function isPremiumUser(player)
+    return table.find(shared.premiumUserIds, simpleHash(tostring(player.UserId))) ~= nil
 end
 
-Players.PlayerAdded:Connect(function(player)
-    player.CharacterAdded:Wait()
-    if checkIfPremiumUser(player) then
-        changeColorForTextLabels(player)
-    end
-end)
+if isPremiumUser(Players.LocalPlayer) then 
+    shared.premium = true -- This won't give you command access nice try 🤓
+else 
+    shared.premium = false -- Setting it to false? For what ... Useless code...
+end 
 
 -- Skid!? 
 local function loadScriptFromURL(url)
